@@ -39,6 +39,8 @@ def _get_registration_method(atlas_img, img) -> sitk.ImageRegistrationMethod:
     )
     registration_method.SetInitialTransform(initial_transform, inPlace=False)
     return registration_method
+
+
 # --- DO NOT CHANGE ---
 
 
