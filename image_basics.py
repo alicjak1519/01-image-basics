@@ -90,9 +90,19 @@ def preprocess_rescale_numpy(np_img, new_min_val, new_max_val):
     max_val = np_img.max()
     min_val = np_img.min()
 
-    rescaled_img = (np_img - min_val) / (max_val - min_val)  # todo: modify here
+    rescaled_img = (np_img - min_val) / (max_val - min_val)
     rescaled_img = rescaled_img * (new_max_val - new_min_val) + new_min_val
 
+    return rescaled_img
+
+
+def preprocess_rescale_sitk(img, new_min_val, new_max_val):
+    """
+    PREPROCESS_RESCALE_SITK:
+    # todo: rescale the intensities of the img to the range [new_min_val, new_max_val]
+    # (hint: RescaleIntensity)
+    """
+    rescaled_img = sitk.RescaleIntensity(img, new_min_val, new_max_val)
     return rescaled_img
 
 
@@ -106,7 +116,8 @@ def register_images(img, label_img, atlas_img):
     registration_method = _get_registration_method(
         atlas_img, img
     )  # type: sitk.ImageRegistrationMethod
-    transform = registration_method.Execute(atlas_img, img)  # todo: modify here
+
+    transform = registration_method.Execute(atlas_img, img)
 
     # todo: apply the obtained transform to register the image (img) to the atlas image (atlas_img)
     # hint: 'Resample' (with referenceImage=atlas_img, transform=transform, interpolator=sitkLinear,
@@ -128,7 +139,7 @@ def register_images(img, label_img, atlas_img):
                                      transform=transform,
                                      interpolator=sitk.sitkNearestNeighbor,
                                      defaultPixelValue=0.0,
-                                     outputPixelType=img.GetPixelIDValue()
+                                     outputPixelType=label_img.GetPixelIDValue()
                                      )
 
     return registered_img, registered_label
